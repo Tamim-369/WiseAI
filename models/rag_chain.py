@@ -26,7 +26,7 @@ class RAGChainModel:
 
         Answer:
         """
-        prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+        prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question", "chat_history"])
         return RetrievalQA.from_chain_type(
             llm=self.llm,
             chain_type="stuff", 
@@ -36,4 +36,4 @@ class RAGChainModel:
 
     def query(self, question, chat_history):
         """Run a query through the RAG chain and return the answer."""
-        return self.chain.invoke({"query": question, "chat_history":chat_history})["result"]
+        return self.chain.invoke({"query": question, "chat_history": chat_history})["result"]
