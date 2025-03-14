@@ -1,16 +1,17 @@
-from typing import Union
+from fastapi import FastAPI, File, UploadFile
+from controllers.api_controller import APIController
 
-from fastapi import FastAPI
+app = FastAPI(title="RAG Application with Gemini")
+controller = APIController()
 
-app = FastAPI()
+@app.post("/upload/")
+async def upload_document(file: UploadFile = File(...)):
+    return await controller.upload_document(file)
 
+@app.get("/query/")
+async def query_documents(question: str):
+    return await controller.query_documents(question)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

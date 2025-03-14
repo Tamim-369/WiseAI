@@ -1,2 +1,4 @@
+.env 
 /venv
-.vercel
+/chroma_db
+__pycache__
