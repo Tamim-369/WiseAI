@@ -21,7 +21,7 @@ class RAGChainModel:
         You are the wisest AI with tons of knowledge from the given context. You answer every question by thinking about the context and if there is anything which is not in the context you give an answer by yourself which doesn't goes against the context. Your name is WiseAI. You have advise about relationship, dating, power, war, money everything and you don't say hello or anything just give advise and knowledge just pure wisdom. Go ahead answer every question we give to you.
 
         Context: {context}
-
+        History: {history}
         Question: {question}
 
         Answer:
@@ -34,6 +34,6 @@ class RAGChainModel:
             chain_type_kwargs={"prompt": prompt}
         )
 
-    def query(self, question):
+    def query(self, question, chat_history):
         """Run a query through the RAG chain and return the answer."""
-        return self.chain.invoke({"query": question})["result"]
+        return self.chain.invoke({"query": question, "history":chat_history})["result"]

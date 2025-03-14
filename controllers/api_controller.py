@@ -32,10 +32,10 @@ class APIController:
 
         return response
 
-    async def query_documents(self, question):
+    async def query_documents(self, question, chat_history):
         """Handle query and return RAG response."""
         try:
-            answer = self.rag_chain.query(question)
+            answer = self.rag_chain.query(question, chat_history)
             response = self.view.success_response(data={"answer": answer})
         except Exception as e:
             response = self.view.error_response(str(e))
