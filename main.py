@@ -6,7 +6,8 @@ from typing import List, Optional
 app = FastAPI(title="RAG Application with Gemini")
 controller = APIController()
 origins = [
-    "*"
+    "http://localhost:5173",
+    "https://wise-ai-frontend.vercel.app"
 ]
 app.add_middleware(
     CORSMiddleware,
