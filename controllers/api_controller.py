@@ -45,7 +45,7 @@ class APIController:
     async def generate_speech_stream(self, text: str) -> AsyncGenerator[bytes, None]:
         """Generate speech using edge_tts and stream it."""
         try:
-            tts = edge_tts.Communicate(text, voice="en-US-EricNeural", rate="-10%", volume="+10%")
+            tts = edge_tts.Communicate(text, voice="en-US-AndrewMultilingualNeural", rate="-10%", volume="+10%")
             async for chunk in tts.stream():
                 if chunk["type"] == "audio":
                     yield chunk["data"]

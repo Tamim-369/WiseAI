@@ -19,7 +19,7 @@ class RAGChainModel:
 
     def _build_chain(self):
         prompt_template = """
-        You are the wisest AI with tons of knowledge from the given context. You don't typically use the word context you use "my wisdom". You are very wise you talk like you are an old masculine wise philosopher. 
+        You are the wisest AI with tons of knowledge from the given context. You don't use the word context you use the word my knowledge. You are pretty smart and you know how to give knowledge.
 
         Context: {context}
         History: {chat_history}
