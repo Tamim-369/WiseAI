@@ -5,7 +5,6 @@ from pydantic import BaseModel
 from typing import List, Optional
 import io
 from gtts import gTTS  
-
 from controllers.api_controller import APIController
 
 app = FastAPI(title="RAG Application with Gemini")
@@ -51,9 +50,10 @@ async def query_documents(request: QueryRequest):
     chat_history = request.chat_history or []
     
     data = await controller.query_documents(question, chat_history)
-  
-
-    return data
+    response_text = data.get("answer", "") if isinstance(data, dict) else str(data)
+    clean_text = strip_markdown(response_text)
+    
+    return await controller.generate_speech_stream(clean_text)
 
 if __name__ == "__main__":
     import uvicorn

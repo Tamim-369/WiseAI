@@ -1,6 +1,8 @@
 from models.vector_store import VectorStoreModel
 from models.rag_chain import RAGChainModel
 from views.api_views import APIView
+from typing import AsyncGenerator
+import edge_tts
 import os
 
 class APIController:
@@ -40,3 +42,17 @@ class APIController:
         except Exception as e:
             response = self.view.error_response(str(e))
         return response
+    async def generate_speech_stream(text: str) -> AsyncGenerator[bytes, None]:
+        """Generate speech using edge_tts and stream it."""
+        try:
+            tts = edge_tts.Communicate(text, voice="en-US-EricNeural", rate="-10%", volume="+10%")
+
+            async for chunk in tts.stream():
+                if chunk["type"] == "audio":
+                    yield chunk["data"]
+                elif chunk["type"] == "WordBoundary":
+                    continue  
+
+        except Exception as e:
+            print(f"An error occurred during speech generation: {e}")
+            raise
