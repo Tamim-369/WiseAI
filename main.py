@@ -15,6 +15,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://wise-ai-frontend.vercel.app", "http://localhost:5173"],  
     allow_credentials=True, 
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Request model
@@ -48,24 +50,10 @@ async def query_documents(request: QueryRequest):
     question = request.question
     chat_history = request.chat_history or []
     
-    answer = await controller.query_documents(question, chat_history)
-    
-    print(answer)
-    clean_answer = strip_markdown(answer)
+    data = await controller.query_documents(question, chat_history)
+  
 
-    def generate_audio():
-        tts = gTTS(text=clean_answer, lang="en", slow=True) 
-        audio_buffer = io.BytesIO()
-        tts.write_to_fp(audio_buffer)
-        audio_buffer.seek(0)
-        while chunk := audio_buffer.read(1024): 
-            yield chunk
-
-    return StreamingResponse(
-        generate_audio(),
-        media_type="audio/mpeg",
-        headers={"X-Text": clean_answer}  
-    )
+    return data
 
 if __name__ == "__main__":
     import uvicorn
