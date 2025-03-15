@@ -52,9 +52,16 @@ async def query_documents(request: QueryRequest):
     data = await controller.query_documents(question, chat_history)
     response_text = data.get("answer", "") if isinstance(data, dict) else str(data)
     clean_text = strip_markdown(response_text)
-    
-    return await controller.generate_speech_stream(clean_text)
 
+    async def stream_audio():
+        async for chunk in controller.generate_speech_stream(clean_text):
+            yield chunk
+
+    return StreamingResponse(
+        stream_audio(),
+        media_type="audio/mpeg",
+        headers={"Content-Disposition": "inline"}
+    )
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

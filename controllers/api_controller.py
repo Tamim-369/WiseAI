@@ -38,21 +38,19 @@ class APIController:
         """Handle query and return RAG response."""
         try:
             answer = self.rag_chain.query(question, chat_history)
-            response = self.view.success_response(data=answer)
+            response = answer
         except Exception as e:
             response = self.view.error_response(str(e))
         return response
-    async def generate_speech_stream(text: str) -> AsyncGenerator[bytes, None]:
+    async def generate_speech_stream(self, text: str) -> AsyncGenerator[bytes, None]:
         """Generate speech using edge_tts and stream it."""
         try:
             tts = edge_tts.Communicate(text, voice="en-US-EricNeural", rate="-10%", volume="+10%")
-
             async for chunk in tts.stream():
                 if chunk["type"] == "audio":
                     yield chunk["data"]
                 elif chunk["type"] == "WordBoundary":
-                    continue  
-
+                    continue
         except Exception as e:
             print(f"An error occurred during speech generation: {e}")
             raise
