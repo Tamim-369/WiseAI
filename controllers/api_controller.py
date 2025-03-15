@@ -36,7 +36,7 @@ class APIController:
         """Handle query and return RAG response."""
         try:
             answer = self.rag_chain.query(question, chat_history)
-            response = self.view.success_response(data={"answer": answer})
+            response = answer
         except Exception as e:
             response = self.view.error_response(str(e))
         return response
