@@ -13,7 +13,8 @@ controller = APIController()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://wise-ai-frontend.vercel.app", "http://localhost:5173", ],  
+    allow_credentials=True, 
     allow_methods=["*"],
     allow_headers=["*"],
 )
